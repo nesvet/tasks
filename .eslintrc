@@ -1,0 +1,10 @@
+{
+	"extends": "@nesvet",
+	"env": {
+		"node": true
+	},
+	"ignorePatterns": [
+		"dist/*"
+	],
+	"root": true
+}
