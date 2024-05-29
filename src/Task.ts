@@ -50,9 +50,9 @@ export class Task extends EventEmitter {
 	
 	#promise?: Promise<unknown>;
 	
-	reject?: (error?: Error) => void;
+	reject?(error?: Error): void;
 	
-	do?: (...args: unknown[]) => Promise<unknown>;
+	do?(...args: unknown[]): Promise<unknown>;
 	
 	whenExecuted() {
 		return this.#promise;
