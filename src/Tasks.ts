@@ -4,7 +4,7 @@ import { Task } from "./Task";
 
 
 export class Tasks extends EventEmitter {
-	constructor(tasksAvailable: Record<string, Task>) {
+	constructor(tasksAvailable: Record<string, typeof Task>) {
 		super();
 		
 		Object.assign(this.#available, tasksAvailable);
@@ -13,10 +13,10 @@ export class Tasks extends EventEmitter {
 	
 	running = new Map<string, Task>();
 	
-	#available: Record<string, Task> = {};
+	#available: Record<string, typeof Task> = {};
 	
 	do(taskName: string, ...taskArgs: unknown[]) {
-		const TheTask = this.#available[taskName] as unknown as typeof Task;
+		const TheTask = this.#available[taskName];
 		
 		if (!TheTask)
 			throw new Err(`No such task name: ${taskName}`, "taskdoesnotexist");
