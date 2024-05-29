@@ -22,7 +22,7 @@ export class Task extends EventEmitter {
 	
 	isAborted = false;
 	
-	onAbort?: (error: Error) => unknown;
+	onAbort?(error: Error): unknown;
 	
 	status = "idle";
 	state: Record<string, unknown> = {
