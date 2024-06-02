@@ -1,6 +1,10 @@
+import os from "node:os";
 import { areArraysEqual, Err, noop } from "@nesvet/n";
 import EventEmitter from "eventemitter3";
 import { Task } from "./Task";
+
+
+const availableParallelism = os.availableParallelism();
 
 
 export class Tasks extends EventEmitter {
@@ -10,6 +14,8 @@ export class Tasks extends EventEmitter {
 		Object.assign(this.#available, tasksAvailable);
 		
 	}
+	
+	availableParallelism = availableParallelism;
 	
 	running = new Map<string, Task>();
 	
@@ -48,5 +54,8 @@ export class Tasks extends EventEmitter {
 		
 		return task;
 	}
+	
+	
+	static availableParallelism = availableParallelism;
 	
 }

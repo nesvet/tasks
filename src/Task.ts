@@ -1,7 +1,6 @@
-import os from "node:os";
 import { Err } from "@nesvet/n";
 import EventEmitter from "eventemitter3";
-import { type Tasks } from "./Tasks.js";
+import { Tasks } from "./Tasks.js";
 
 
 export class Task extends EventEmitter {
@@ -18,7 +17,7 @@ export class Task extends EventEmitter {
 	
 	tasks: Tasks;
 	
-	availableParallelism = os.availableParallelism();
+	availableParallelism = Tasks.availableParallelism;
 	
 	isAborted = false;
 	
@@ -88,5 +87,8 @@ export class Task extends EventEmitter {
 			})
 		);
 	}
+	
+	
+	static availableParallelism = Tasks.availableParallelism;
 	
 }
