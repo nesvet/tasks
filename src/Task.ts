@@ -35,7 +35,7 @@ export class Task extends EventEmitter {
 		
 	}
 	
-	async abort(error = new Err("Aborted", "aborted")) {
+	async abort(error: Error = new Err("Aborted", "aborted")) {
 		
 		this.state.error = error;
 		
