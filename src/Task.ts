@@ -3,7 +3,7 @@ import EventEmitter from "eventemitter3";
 import { Tasks } from "./Tasks.js";
 
 
-export class Task extends EventEmitter {
+export class Task<Result = unknown> extends EventEmitter {
 	constructor(tasks: Tasks, args: unknown[]) {
 		super();
 		
@@ -45,14 +45,14 @@ export class Task extends EventEmitter {
 		}
 	};
 	
-	#promise?: Promise<unknown>;
+	#promise?: Promise<Result>;
 	
 	reject?(error?: Error): void;
 	
-	do?(...args: unknown[]): Promise<unknown>;
+	do?(...args: unknown[]): Promise<Result>;
 	
 	whenExecuted() {
-		return this.#promise;
+		return this.#promise!;
 	}
 	
 	execute() {
