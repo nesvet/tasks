@@ -19,8 +19,6 @@ export class Task extends EventEmitter {
 	
 	availableParallelism = Tasks.availableParallelism;
 	
-	isAborted = false;
-	
 	onAbort?(error: Error): unknown;
 	
 	status = "idle";
@@ -35,17 +33,17 @@ export class Task extends EventEmitter {
 		
 	}
 	
-	async abort(error: Error = new Err("Aborted", "aborted")) {
-		
-		this.state.error = error;
-		
-		this.isAborted = true;
-		
-		await this.onAbort?.(error);
-		
-		this.reject?.(error);
-		
-	}
+	abort = async (error: Error = new Err("Aborted", "aborted")) => {
+		if (!this.state.error) {
+			this.status = "error";
+			this.setState({ error });
+			
+			this.emit("error", error);
+			await this.onAbort?.(error);
+			
+			this.reject?.(error);
+		}
+	};
 	
 	#promise?: Promise<unknown>;
 	
@@ -75,16 +73,7 @@ export class Task extends EventEmitter {
 				this.emit("success", result);
 				
 				return result;
-			}, error => {
-				if (!error.tag)
-					console.error(error);
-				
-				this.status = "error";
-				this.setState({ error });
-				this.emit("error", error);
-				
-				throw error;
-			})
+			}, this.abort) as Promise<Result>
 		);
 	}
 	
