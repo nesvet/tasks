@@ -24,7 +24,7 @@
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
-    "@nesvet/eslint-config": "^1.1.1",
+    "@nesvet/eslint-config": "^2.0.13",
     "@types/node": "^20.14.2",
     "typescript": "^5.4.5"
   }
