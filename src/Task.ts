@@ -3,7 +3,7 @@ import EventEmitter from "eventemitter3";
 import { Tasks } from "./Tasks.js";
 
 
-export class Task<Result = unknown> extends EventEmitter {
+export class Task<Result = void> extends EventEmitter {
 	constructor(tasks: Tasks, args: unknown[]) {
 		super();
 		
