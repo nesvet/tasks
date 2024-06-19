@@ -1,11 +1,11 @@
 {
   "name": "@nesvet/tasks",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Tasks",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "packageManager": "bun@1.1.13",
+  "packageManager": "bun@1.1.14",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p ."
@@ -24,7 +24,7 @@
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
-    "@nesvet/eslint-config": "^2.0.13",
+    "@nesvet/eslint-config": "^2.0.14",
     "@types/node": "^20.14.5",
     "typescript": "^5.4.5"
   }
