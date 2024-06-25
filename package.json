@@ -1,11 +1,11 @@
 {
   "name": "@nesvet/tasks",
-  "version": "1.0.20",
+  "version": "1.1.0",
   "description": "Tasks",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "packageManager": "bun@1.1.14",
+  "packageManager": "bun@1.1.16",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p ."
@@ -20,12 +20,12 @@
   "author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
   "license": "MIT",
   "dependencies": {
-    "@nesvet/n": "^1.0.62",
+    "@nesvet/n": "^1.0.63",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
-    "@nesvet/eslint-config": "^2.0.14",
-    "@types/node": "^20.14.5",
-    "typescript": "^5.4.5"
+    "@nesvet/eslint-config": "^2.0.18",
+    "@types/node": "^20.14.8",
+    "typescript": "^5.5.2"
   }
 }
