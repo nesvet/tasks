@@ -1,38 +1,43 @@
 import os from "node:os";
-import { areArraysEqual, Err, noop } from "@nesvet/n";
 import EventEmitter from "eventemitter3";
-import { Task } from "./Task";
+import { areArraysEqual, Err, noop } from "@nesvet/n";
+import type { Task } from "./Task";
 
 
 const availableParallelism = os.availableParallelism();
 
+type TaskUnknown = typeof Task<unknown>;
+type GenericGlossary = Record<string, TaskUnknown>;
+type ValueInstance<T extends GenericGlossary> = InstanceType<T[keyof T]>;
+type StringKey<T> = Extract<keyof T, string>;
 
-export class Tasks extends EventEmitter {
-	constructor(tasksAvailable: Record<string, typeof Task>) {
+
+export class Tasks<Glossary extends GenericGlossary> extends EventEmitter {
+	constructor(glossary: Glossary) {
 		super();
 		
-		Object.assign(this.#available, tasksAvailable);
+		this.#glossary = glossary;
 		
 	}
 	
+	#glossary;
+	
 	availableParallelism = availableParallelism;
 	
-	running = new Map<string, Task>();
+	running = new Map<StringKey<Glossary>, ValueInstance<Glossary>>();
 	
-	#available: Record<string, typeof Task> = {};
-	
-	do(taskName: string, ...taskArgs: unknown[]) {
-		const TheTask = this.#available[taskName];
+	do(taskName: StringKey<Glossary>, ...taskArgs: unknown[]) {
+		const TheTask = this.#glossary[taskName];
 		
 		if (!TheTask)
-			throw new Err(`No such task name: ${taskName}`, "taskdoesnotexist");
+			throw new Err(`No such task name: ${String(taskName)}`, "taskdoesnotexist");
 		
 		let task = this.running.get(taskName);
 		
 		if (task && areArraysEqual(task.args, taskArgs))
 			return task;
 		
-		task = new TheTask(this, taskArgs);
+		task = new TheTask(taskArgs) as ValueInstance<Glossary>;
 		
 		this.running.set(taskName, task);
 		

@@ -1,21 +1,17 @@
-import { Err } from "@nesvet/n";
 import EventEmitter from "eventemitter3";
+import { Err } from "@nesvet/n";
 import { Tasks } from "./Tasks.js";
 
 
-export class Task<Result = void> extends EventEmitter {
-	constructor(tasks: Tasks, args: unknown[]) {
+export class Task<Result> extends EventEmitter {
+	constructor(args: unknown[]) {
 		super();
-		
-		this.tasks = tasks;
 		
 		this.args = args;
 		
 	}
 	
-	args: unknown[];
-	
-	tasks: Tasks;
+	args;
 	
 	availableParallelism = Tasks.availableParallelism;
 	
