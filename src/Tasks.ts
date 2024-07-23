@@ -1,19 +1,22 @@
 import os from "node:os";
 import EventEmitter from "eventemitter3";
-import { areArraysEqual, Err, noop } from "@nesvet/n";
+import {
+	areArraysEqual,
+	Err,
+	noop,
+	StringKey
+} from "@nesvet/n";
 import type { Task } from "./Task";
 
 
 const availableParallelism = os.availableParallelism();
 
-type TaskUnknown = typeof Task<unknown>;
-type GenericGlossary = Record<string, TaskUnknown>;
-type ValueInstance<T extends GenericGlossary> = InstanceType<T[keyof T]>;
-type StringKey<T> = Extract<keyof T, string>;
+type Glossary = Record<string, typeof Task<unknown>>;
+type ValueInstance<G extends Glossary> = InstanceType<G[keyof G]>;
 
 
-export class Tasks<Glossary extends GenericGlossary> extends EventEmitter {
-	constructor(glossary: Glossary) {
+export class Tasks<G extends Glossary> extends EventEmitter {
+	constructor(glossary: G) {
 		super();
 		
 		this.#glossary = glossary;
@@ -24,9 +27,9 @@ export class Tasks<Glossary extends GenericGlossary> extends EventEmitter {
 	
 	availableParallelism = availableParallelism;
 	
-	running = new Map<StringKey<Glossary>, ValueInstance<Glossary>>();
+	running = new Map<StringKey<G>, ValueInstance<G>>();
 	
-	do(taskName: StringKey<Glossary>, ...taskArgs: unknown[]) {
+	do(taskName: StringKey<G>, ...taskArgs: unknown[]) {
 		const TheTask = this.#glossary[taskName];
 		
 		if (!TheTask)
@@ -37,7 +40,7 @@ export class Tasks<Glossary extends GenericGlossary> extends EventEmitter {
 		if (task && areArraysEqual(task.args, taskArgs))
 			return task;
 		
-		task = new TheTask(taskArgs) as ValueInstance<Glossary>;
+		task = new TheTask(taskArgs) as ValueInstance<G>;
 		
 		this.running.set(taskName, task);
 		
