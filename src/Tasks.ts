@@ -66,4 +66,8 @@ export class Tasks<G extends Glossary> extends EventEmitter {
 	
 	static availableParallelism = availableParallelism;
 	
+	static init<L extends Glossary>(glossary: L) {
+		return new Tasks(glossary);
+	}
+	
 }
