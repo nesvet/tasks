@@ -9,9 +9,12 @@ import {
 import type { Task } from "./Task";
 
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 const availableParallelism = os.availableParallelism();
 
-type Glossary = Record<string, typeof Task<unknown>>;
+type Glossary = Record<string, typeof Task<any>>;
 type ValueInstance<G extends Glossary> = InstanceType<G[keyof G]>;
 
 
@@ -29,7 +32,7 @@ export class Tasks<G extends Glossary> extends EventEmitter {
 	
 	running = new Map<StringKey<G>, ValueInstance<G>>();
 	
-	do(taskName: StringKey<G>, ...taskArgs: unknown[]) {
+	do(taskName: StringKey<G>, ...taskArgs: any[]) {
 		const TheTask = this.#glossary[taskName];
 		
 		if (!TheTask)

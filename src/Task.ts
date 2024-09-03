@@ -3,8 +3,11 @@ import { Err } from "@nesvet/n";
 import { Tasks } from "./Tasks.js";
 
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 export class Task<Result> extends EventEmitter {
-	constructor(args: unknown[]) {
+	constructor(args: any[]) {
 		super();
 		
 		this.args = args;
@@ -15,10 +18,10 @@ export class Task<Result> extends EventEmitter {
 	
 	availableParallelism = Tasks.availableParallelism;
 	
-	onAbort?(error: Error): unknown;
+	onAbort?(error: Error): any;
 	
 	status = "idle";
-	state: Record<string, unknown> = {
+	state: Record<string, any> = {
 		result: null,
 		error: null
 	};
@@ -45,7 +48,7 @@ export class Task<Result> extends EventEmitter {
 	
 	reject?(error?: Error): void;
 	
-	do?(...args: unknown[]): Promise<Result>;
+	do?(...args: any[]): Promise<Result>;
 	
 	whenExecuted() {
 		return this.#promise!;
