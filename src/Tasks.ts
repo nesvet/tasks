@@ -6,7 +6,7 @@ import {
 	noop,
 	StringKey
 } from "@nesvet/n";
-import type { Task } from "./Task";
+import type { Glossary, Options, ValueInstance } from "./types";
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -14,19 +14,20 @@ import type { Task } from "./Task";
 
 const availableParallelism = os.availableParallelism();
 
-type Glossary = Record<string, typeof Task<any>>;
-type ValueInstance<G extends Glossary> = InstanceType<G[keyof G]>;
-
 
 export class Tasks<G extends Glossary> extends EventEmitter {
-	constructor(glossary: G) {
+	constructor(glossary: G, taskOptions?: Options) {
 		super();
 		
 		this.#glossary = glossary;
 		
+		this.#taskOptions = taskOptions;
+		
 	}
 	
 	#glossary;
+	
+	#taskOptions;
 	
 	availableParallelism = availableParallelism;
 	
@@ -43,7 +44,7 @@ export class Tasks<G extends Glossary> extends EventEmitter {
 		if (task && areArraysEqual(task.args, taskArgs))
 			return task;
 		
-		task = new TheTask(taskArgs) as ValueInstance<G>;
+		task = new TheTask(taskArgs, this.#taskOptions) as ValueInstance<G>;
 		
 		this.running.set(taskName, task);
 		
@@ -69,8 +70,8 @@ export class Tasks<G extends Glossary> extends EventEmitter {
 	
 	static availableParallelism = availableParallelism;
 	
-	static init<L extends Glossary>(glossary: L) {
-		return new Tasks(glossary);
+	static init<L extends Glossary>(glossary: L, taskOptions?: Options) {
+		return new Tasks(glossary, taskOptions);
 	}
 	
 }

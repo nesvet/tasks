@@ -1,20 +1,26 @@
 import EventEmitter from "eventemitter3";
 import { Err } from "@nesvet/n";
 import { Tasks } from "./Tasks.js";
+import type { Options } from "./types.js";
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 export class Task<Result> extends EventEmitter {
-	constructor(args: any[]) {
+	constructor(args: any[], options?: Options) {
 		super();
 		
 		this.args = args;
 		
+		if (options?.verbose)
+			this.#isVerbose = true;
+		
 	}
 	
 	args;
+	
+	#isVerbose;
 	
 	availableParallelism = Tasks.availableParallelism;
 	
@@ -27,7 +33,12 @@ export class Task<Result> extends EventEmitter {
 	};
 	
 	setState(state: object) {
+		
+		if (this.#isVerbose)
+			console.info(state);
+		
 		Object.assign(this.state, state);
+		
 		this.emit("state", this);
 		
 	}
