@@ -53,6 +53,7 @@ export class Task<Result> extends EventEmitter {
 			
 			this.reject?.(error);
 		}
+		
 	};
 	
 	#promise?: Promise<Result>;
