@@ -48,21 +48,24 @@ export class Tasks<G extends Glossary> extends EventEmitter {
 		
 		this.running.set(taskName, task);
 		
-		const handleState = () => this.emit(taskName, task);
+		const handleState = () => this.emit(`${taskName}.state`, task);
+		const handleError = () => this.emit(`${taskName}.error`, task);
 		
 		task.on("state", handleState);
+		task.on("error", handleError);
 		
 		task.execute().catch(noop).finally(() => {
 			
 			task.off("state", handleState);
+			task.off("error", handleError);
 			
 			this.running.delete(taskName);
 			
-			this.emit(taskName, null);
+			this.emit(`${taskName}.end`, task);
 			
 		});
 		
-		this.emit(taskName, task);
+		this.emit(`${taskName}.begin`, task);
 		
 		return task;
 	}
